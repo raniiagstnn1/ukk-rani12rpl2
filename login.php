@@ -1,9 +1,9 @@
 <?php
 /**
- * =================================================================
- * HALAMAN LOGIN ADMIN - BEAUTY DIGITAL HUB
- * Layout Split-Screen (Form Kiri, Animasi Gradasi Kanan)
- * =================================================================
+- =================================================================
+- HALAMAN LOGIN ADMIN - LUXURY BLACK & GOLD EDITION
+- Layout Split-Screen (Form Kiri, Animasi Gradasi Kanan)
+- =================================================================
  */
 session_start();
 include 'koneksi.php';
@@ -39,14 +39,14 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - Beauty Digital Hub</title>
+    <title>Login Admin - Haute Couture Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #4b1d95 0%, #6d28d9 50%, #3b0764 100%);
+            background: radial-gradient(circle at top right, #12100e 0%, #060608 70%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -54,17 +54,20 @@ if (isset($_POST['login'])) {
             padding: 20px;
             color: #fff;
         }
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
 
         /* Container Utama */
         .main-wrapper {
-            background: #1a1635;
+            background: #0d0d12;
             border-radius: 28px;
             overflow: hidden;
             width: 100%;
             max-width: 980px;
             min-height: 560px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.55);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             display: flex;
         }
 
@@ -75,36 +78,37 @@ if (isset($_POST['login'])) {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: #1a1635;
+            background: #0d0d12;
             position: relative;
             z-index: 2;
-            box-shadow: 15px 0 35px rgba(0, 0, 0, 0.35);
+            box-shadow: 15px 0 35px rgba(0, 0, 0, 0.5);
         }
 
         .user-avatar-ring {
             width: 72px;
             height: 72px;
             border-radius: 50%;
-            border: 2.5px solid #00d2ff;
+            border: 2px solid #d4af37;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 28px;
-            color: #00d2ff;
-            font-size: 34px;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.25);
+            color: #f3e5ab;
+            font-size: 32px;
+            background: rgba(212, 175, 55, 0.08);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
         }
 
         .form-label {
-            color: #e2e8f0;
+            color: #cbd5e1;
             font-weight: 600;
             font-size: 13px;
             margin-bottom: 6px;
         }
 
         .input-group-custom {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(212, 175, 55, 0.25);
             border-radius: 50px;
             padding: 4px 18px;
             display: flex;
@@ -113,13 +117,13 @@ if (isset($_POST['login'])) {
         }
 
         .input-group-custom:focus-within {
-            border-color: #ff2a85;
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 15px rgba(255, 42, 133, 0.3);
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.06);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
         }
 
         .input-group-custom i {
-            color: #cbd5e1;
+            color: #d4af37;
             font-size: 17px;
             margin-right: 12px;
         }
@@ -135,35 +139,36 @@ if (isset($_POST['login'])) {
         }
 
         .input-group-custom input::placeholder {
-            color: #cbd5e1;
+            color: #64748b;
             opacity: 0.85;
         }
 
-        .btn-login-pink {
-            background: linear-gradient(90deg, #ff1e8a 0%, #e11d74 100%);
+        .btn-login-gold {
+            background: linear-gradient(135deg, #d4af37 0%, #aa771c 100%);
             border: none;
             border-radius: 50px;
             padding: 13px;
             font-weight: 700;
             font-size: 14px;
             letter-spacing: 1px;
-            color: #ffffff;
+            color: #060608;
             width: 100%;
             margin-top: 10px;
-            box-shadow: 0 10px 25px rgba(255, 30, 138, 0.4);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
             transition: 0.3s;
         }
 
-        .btn-login-pink:hover {
+        .btn-login-gold:hover {
             transform: translateY(-2px);
-            box-shadow: 0 14px 30px rgba(255, 30, 138, 0.55);
-            color: #fff;
+            box-shadow: 0 14px 30px rgba(212, 175, 55, 0.45);
+            background: linear-gradient(135deg, #e5c158 0%, #c48b22 100%);
+            color: #060608;
         }
 
-        /* Bagian Kanan (Animasi Gelombang & Cahaya) */
+        /* Bagian Kanan (Animasi Gelombang & Cahaya Emas) */
         .visual-side {
             flex: 1.25;
-            background: #16122e;
+            background: #08080c;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -172,16 +177,16 @@ if (isset($_POST['login'])) {
             padding: 40px 45px;
         }
 
-        /* Animasi Cahaya Mengalir */
+        /* Animasi Cahaya Emas Mengalir */
         .glow-orb-1 {
             position: absolute;
             width: 380px;
             height: 380px;
-            background: radial-gradient(circle, rgba(255, 42, 133, 0.65) 0%, rgba(154, 31, 255, 0) 70%);
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, rgba(170, 119, 28, 0) 70%);
             border-radius: 50%;
             top: 15%;
             left: 10%;
-            filter: blur(35px);
+            filter: blur(45px);
             animation: floatWave1 7s ease-in-out infinite alternate;
         }
 
@@ -189,11 +194,11 @@ if (isset($_POST['login'])) {
             position: absolute;
             width: 420px;
             height: 420px;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.55) 0%, rgba(58, 123, 213, 0) 70%);
+            background: radial-gradient(circle, rgba(243, 229, 171, 0.25) 0%, rgba(13, 13, 18, 0) 70%);
             border-radius: 50%;
             bottom: 10%;
             right: -5%;
-            filter: blur(40px);
+            filter: blur(50px);
             animation: floatWave2 9s ease-in-out infinite alternate;
         }
 
@@ -201,11 +206,11 @@ if (isset($_POST['login'])) {
             position: absolute;
             width: 140%;
             height: 180px;
-            background: linear-gradient(90deg, rgba(255, 42, 133, 0.5), rgba(138, 43, 226, 0.6), rgba(0, 210, 255, 0.5));
+            background: linear-gradient(90deg, rgba(212, 175, 55, 0.25), rgba(243, 229, 171, 0.35), rgba(170, 119, 28, 0.25));
             top: 38%;
             left: -20%;
             border-radius: 50%;
-            filter: blur(30px);
+            filter: blur(35px);
             transform: rotate(-18deg);
             animation: pulseWave 6s ease-in-out infinite alternate;
         }
@@ -221,8 +226,8 @@ if (isset($_POST['login'])) {
         }
 
         @keyframes pulseWave {
-            0% { transform: rotate(-18deg) scaleY(0.9); opacity: 0.75; }
-            100% { transform: rotate(-12deg) scaleY(1.25); opacity: 1; }
+            0% { transform: rotate(-18deg) scaleY(0.9); opacity: 0.6; }
+            100% { transform: rotate(-12deg) scaleY(1.25); opacity: 0.9; }
         }
 
         .top-nav-links {
@@ -238,20 +243,21 @@ if (isset($_POST['login'])) {
         }
 
         .top-nav-links a {
-            color: #e2e8f0;
+            color: #cbd5e1;
             text-decoration: none;
             transition: 0.2s;
         }
 
         .top-nav-links a:hover {
-            color: #00d2ff;
+            color: #f3e5ab;
         }
 
         .btn-landing-pill {
-            background: #0099cc;
-            color: #fff !important;
+            background: linear-gradient(135deg, #d4af37, #aa771c);
+            color: #060608 !important;
             padding: 7px 18px;
             border-radius: 50px;
+            font-weight: 700;
         }
 
         .welcome-text-box {
@@ -264,18 +270,26 @@ if (isset($_POST['login'])) {
 
         .welcome-text-box h1 {
             font-size: 46px;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: -1px;
             margin-bottom: 10px;
             color: #ffffff;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .welcome-text-box h1 span {
+            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .welcome-text-box p {
-            color: #e2e8f0;
+            color: #94a3b8;
             font-size: 13.5px;
             line-height: 1.6;
             max-width: 340px;
             margin-left: auto;
+            font-weight: 300;
         }
 
         @media (max-width: 768px) {
@@ -295,14 +309,14 @@ if (isset($_POST['login'])) {
         <div class="login-side">
             <div class="text-center mb-2">
                 <div class="user-avatar-ring">
-                    <i class="bi bi-person"></i>
+                    <i class="bi bi-shield-lock"></i>
                 </div>
-                <h5 class="fw-bold text-white mb-1">BEAUTY DIGITAL HUB</h5>
-                <p class="small mb-4" style="color: #cbd5e1;">Panel Administrator</p>
+                <h5 class="fw-bold text-white font-serif mb-1" style="font-size: 24px;">HAUTE COUTURE DIGITAL</h5>
+                <p class="small mb-4" style="color: #94a3b8;">Admin Portal & Management</p>
             </div>
 
             <?php if (!empty($error)): ?>
-                <div class="alert alert-danger bg-danger text-white border-0 py-2 small rounded-pill mb-3 text-center fw-semibold">
+                <div class="alert alert-danger bg-danger bg-opacity-10 border-danger text-danger text-white py-2 small rounded-pill mb-3 text-center fw-semibold">
                     <?= $error; ?>
                 </div>
             <?php endif; ?>
@@ -312,7 +326,7 @@ if (isset($_POST['login'])) {
                     <label class="form-label">Username</label>
                     <div class="input-group-custom">
                         <i class="bi bi-person"></i>
-                        <input type="text" name="username" placeholder="Masukkan username (admin)" required>
+                        <input type="text" name="username" placeholder="Masukkan username admin" required>
                     </div>
                 </div>
 
@@ -320,17 +334,17 @@ if (isset($_POST['login'])) {
                     <label class="form-label">Password</label>
                     <div class="input-group-custom">
                         <i class="bi bi-lock"></i>
-                        <input type="password" name="password" placeholder="Masukkan password (12345)" required>
+                        <input type="password" name="password" placeholder="Masukkan password" required>
                     </div>
                 </div>
 
-                <button type="submit" name="login" class="btn btn-login-pink">LOGIN</button>
+                <button type="submit" name="login" class="btn btn-login-gold">MASUK KE DASHBOARD</button>
             </form>
         </div>
 
-        <!-- SEBELAH KANAN: ANIMASI GELOMBANG CAHAYA & WELCOME -->
+        <!-- SEBELAH KANAN: ANIMASI GELOMBANG CAHAYA EMAS & WELCOME -->
         <div class="visual-side">
-            <!-- Efek Animasi -->
+            <!-- Efek Animasi Emas -->
             <div class="glow-orb-1"></div>
             <div class="glow-orb-2"></div>
             <div class="glow-ribbon"></div>
@@ -343,8 +357,8 @@ if (isset($_POST['login'])) {
 
             <!-- Teks Welcome -->
             <div class="welcome-text-box">
-                <h1>Welcome.</h1>
-                <p>Kelola portofolio website UMKM salon klien secara cepat, modern, dan terintegrasi dalam satu dashboard.</p>
+                <h1>Welcome, <span>Admin.</span></h1>
+                <p>Kelola portofolio website salon mitra eksklusif secara cepat, modern, dan terintegrasi dalam satu dashboard mewah.</p>
             </div>
         </div>
     </div>

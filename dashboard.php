@@ -1,9 +1,9 @@
 <?php
 /**
- * =================================================================
- * DASHBOARD ADMIN - BEAUTY DIGITAL HUB
- * Nuansa Ungu Mewah & Elegan (Selaras dengan Landing Page)
- * =================================================================
+- =================================================================
+- DASHBOARD ADMIN - LUXURY BLACK & GOLD EDITION
+- Nuansa Hitam & Emas Mewah (Selaras dengan Landing Page)
+- =================================================================
  */
 session_start();
 if (!isset($_SESSION['login'])) {
@@ -15,32 +15,37 @@ include 'koneksi.php';
 $query_portfolios = mysqli_query($koneksi, "SELECT * FROM portfolios ORDER BY id_portfolio DESC");
 $total_umkm = mysqli_num_rows($query_portfolios);
 
-$query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_log DESC LIMIT 6");
+// Pengecekan tabel activity_logs aman jika belum dibuat di database
+$query_logs = @mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_log DESC LIMIT 6");
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Beauty Digital Hub</title>
+    <title>Admin Dashboard - Haute Couture Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0714;
-            --bg-card: #130f24;
-            --accent-purple-1: #7c3aed;
-            --accent-purple-2: #a855f7;
+            --bg-dark: #060608;
+            --bg-card: #0d0d12;
+            --gold-primary: #d4af37;
+            --gold-light: #f3e5ab;
+            --gold-dark: #aa771c;
             --text-bright: #ffffff;
-            --text-soft: #cbd5e1;
+            --text-soft: #94a3b8;
         }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #07050f 0%, #120b22 50%, #1a1033 100%);
+            background: radial-gradient(circle at top right, #12100e 0%, #060608 70%);
             color: var(--text-bright);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+        .font-serif {
+            font-family: 'Cormorant Garamond', serif;
         }
 
         /* Sidebar */
@@ -51,18 +56,19 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             position: fixed;
             top: 0;
             left: 0;
-            border-right: 1px solid rgba(139, 92, 246, 0.15);
+            border-right: 1px solid rgba(212, 175, 55, 0.2);
             padding: 20px;
             z-index: 10;
         }
         .sidebar-brand {
-            font-size: 1.05rem;
+            font-size: 1.15rem;
             font-weight: 700;
             color: #fff;
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 30px;
+            font-family: 'Cormorant Garamond', serif;
         }
         .nav-link {
             color: var(--text-soft);
@@ -77,9 +83,9 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             gap: 10px;
         }
         .nav-link:hover, .nav-link.active {
-            background: linear-gradient(135deg, var(--accent-purple-1), var(--accent-purple-2));
-            color: #fff;
-            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.35);
+            background: linear-gradient(135deg, #d4af37, #aa771c);
+            color: #060608;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
         }
 
         /* Main Content */
@@ -91,33 +97,34 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
         /* Card Styling */
         .card-custom {
             background: var(--bg-card);
-            border: 1px solid rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 22px;
             padding: 22px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
 
         /* Tombol Tambah */
         .btn-add-umkm {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: #fff;
+            background: linear-gradient(135deg, #d4af37, #aa771c);
+            color: #060608;
             border: none;
             border-radius: 50px;
             padding: 10px 22px;
             font-weight: 700;
             font-size: 13.5px;
-            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
             transition: 0.2s;
         }
         .btn-add-umkm:hover {
             opacity: 0.9;
             transform: translateY(-2px);
-            color: #fff;
+            color: #060608;
+            background: linear-gradient(135deg, #e5c158, #c48b22);
         }
 
         /* Teks & Label Terang */
         .label-stat {
-            color: #cbd5e1 !important;
+            color: #94a3b8 !important;
             font-size: 12.5px;
             font-weight: 600;
             display: block;
@@ -130,15 +137,15 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
         .table > :not(caption) > * > * {
             background-color: transparent;
             color: var(--text-bright);
-            border-bottom-color: rgba(139, 92, 246, 0.1);
+            border-bottom-color: rgba(212, 175, 55, 0.12);
             padding: 14px 10px;
         }
         .table thead th {
-            color: #d8b4fe !important;
+            color: #f3e5ab !important;
             font-size: 11.5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
         }
 
         /* Link Slug Styling */
@@ -146,9 +153,9 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: rgba(168, 85, 247, 0.15);
-            color: #d8b4fe;
-            border: 1px solid rgba(168, 85, 247, 0.35);
+            background: rgba(212, 175, 55, 0.1);
+            color: #f3e5ab;
+            border: 1px solid rgba(212, 175, 55, 0.3);
             padding: 4px 10px;
             border-radius: 8px;
             font-size: 12px;
@@ -157,8 +164,8 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             transition: 0.2s;
         }
         .slug-link:hover {
-            background: #a855f7;
-            color: #ffffff;
+            background: #d4af37;
+            color: #060608;
         }
 
         /* Log Aktivitas */
@@ -171,7 +178,7 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             width: 4px;
         }
         .log-container::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.25);
+            background: rgba(212, 175, 55, 0.25);
             border-radius: 10px;
         }
     </style>
@@ -181,17 +188,17 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
     <!-- SIDEBAR -->
     <div class="sidebar d-none d-lg-block">
         <div class="sidebar-brand">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white shadow" style="width:36px;height:36px;background:linear-gradient(135deg, #7c3aed, #a855f7);">
+            <div class="rounded-circle d-flex align-items-center justify-content-center text-dark shadow" style="width:36px;height:36px;background:linear-gradient(135deg, #d4af37, #aa771c);">
                 <i class="bi bi-stars"></i>
             </div>
-            <span>BeautyDigital</span>
+            <span>Haute Couture</span>
         </div>
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link active" href="dashboard.php"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index.php" target="_blank"><i class="bi bi-house-door"></i> Lihat Landing Page</a>
+                <a class="nav-link" href="index.php" target="_blank"><i class="bi bi-house-door"></i> Lihat Beranda</a>
             </li>
             <li class="nav-item mt-5">
                 <a class="nav-link text-danger bg-danger bg-opacity-10" href="logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
@@ -204,11 +211,11 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
         <!-- TOPBAR -->
         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-light border-opacity-10">
             <div>
-                <h3 class="fw-bold mb-1 text-white">Dashboard Admin</h3>
-                <p class="mb-0" style="color: #cbd5e1; font-size: 14px;">Kelola portofolio salon dan lihat aktivitas sistem secara real-time.</p>
+                <h3 class="fw-bold mb-1 text-white font-serif" style="font-size: 30px;">Admin Dashboard</h3>
+                <p class="mb-0 text-secondary" style="font-size: 14px;">Kelola portofolio salon VIP dan lihat aktivitas sistem secara real-time.</p>
             </div>
             <div class="d-flex align-items-center gap-3">
-                <span class="small" style="color: #cbd5e1;">Halo, <b class="text-white"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Admin'); ?></b></span>
+                <span class="small text-secondary">Halo, <b class="text-white"><?= htmlspecialchars($_SESSION['nama_lengkap'] ?? 'Admin'); ?></b></span>
                 <a href="tambah_portfolios.php" class="btn btn-add-umkm">
                     <i class="bi bi-plus-lg me-1"></i> Tambah UMKM Baru
                 </a>
@@ -221,9 +228,9 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                 <div class="card-custom d-flex align-items-center justify-content-between">
                     <div>
                         <span class="label-stat">Total UMKM Terdaftar</span>
-                        <h4 class="fw-bold mb-0 text-white"><?= $total_umkm; ?> Salon</h4>
+                        <h4 class="fw-bold mb-0 text-white font-serif fs-3"><?= $total_umkm; ?> Salon</h4>
                     </div>
-                    <div class="rounded-3 p-3" style="background:rgba(168,85,247,0.2); color:#d8b4fe; font-size:22px;">
+                    <div class="rounded-3 p-3 text-dark" style="background:linear-gradient(135deg, #d4af37, #aa771c); font-size:22px;">
                         <i class="bi bi-shop"></i>
                     </div>
                 </div>
@@ -234,7 +241,7 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                         <span class="label-stat">Status Server</span>
                         <h5 class="fw-bold mb-0 text-success"><i class="bi bi-circle-fill small me-1" style="font-size:10px;"></i> Aktif (Online)</h5>
                     </div>
-                    <div class="rounded-3 p-3 text-success" style="background:rgba(25,135,84,0.2); font-size:22px;">
+                    <div class="rounded-3 p-3 text-success" style="background:rgba(25,135,84,0.15); font-size:22px; border:1px solid rgba(25,135,84,0.3);">
                         <i class="bi bi-shield-check"></i>
                     </div>
                 </div>
@@ -243,9 +250,9 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                 <div class="card-custom d-flex align-items-center justify-content-between">
                     <div>
                         <span class="label-stat">Developer UKK</span>
-                        <h6 class="fw-bold mb-0 text-info">Rani Agustin (12 RPL)</h6>
+                        <h6 class="fw-bold mb-0" style="color: #f3e5ab;">Rani Agustin (12 RPL)</h6>
                     </div>
-                    <div class="rounded-3 p-3 text-info" style="background:rgba(13,202,240,0.2); font-size:22px;">
+                    <div class="rounded-3 p-3" style="background:rgba(212,175,55,0.1); color:#d4af37; font-size:22px; border:1px solid rgba(212,175,55,0.3);">
                         <i class="bi bi-code-slash"></i>
                     </div>
                 </div>
@@ -258,8 +265,8 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             <div class="col-lg-8">
                 <div class="card-custom">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="fw-bold text-white mb-0"><i class="bi bi-folder2-open text-warning me-2"></i>Daftar Portofolio Salon Klien</h5>
-                        <span class="badge bg-light bg-opacity-10 text-white"><?= $total_umkm; ?> Data</span>
+                        <h5 class="fw-bold text-white font-serif fs-4 mb-0"><i class="bi bi-folder2-open me-2" style="color: #d4af37;"></i>Daftar Portofolio Salon Klien</h5>
+                        <span class="badge" style="background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3);"><?= $total_umkm; ?> Data</span>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle">
@@ -286,14 +293,14 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                                     <td><?= $no++; ?></td>
                                     <td>
                                         <?php if (!empty($row['logo']) && file_exists("uploads/" . $row['logo'])): ?>
-                                            <img src="uploads/<?= $row['logo']; ?>" class="rounded-circle" width="36" height="36" style="object-fit: cover;">
+                                            <img src="uploads/<?= $row['logo']; ?>" class="rounded-circle" width="36" height="36" style="object-fit: cover; border: 1px solid rgba(212,175,55,0.3);">
                                         <?php else: ?>
-                                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:36px;height:36px;font-size:11px;">No</div>
+                                            <div class="rounded-circle text-dark d-flex align-items-center justify-content-center fw-bold" style="width:36px;height:36px;font-size:11px;background:#d4af37;">No</div>
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <div class="fw-bold text-white"><?= htmlspecialchars($row['nama_usaha']); ?></div>
-                                        <div class="small" style="color: #cbd5e1;"><?= htmlspecialchars($row['tagline'] ?? ''); ?></div>
+                                        <div class="fw-bold text-white font-serif fs-5"><?= htmlspecialchars($row['nama_usaha']); ?></div>
+                                        <div class="small text-secondary"><?= htmlspecialchars($row['tagline'] ?? ''); ?></div>
                                     </td>
                                     <!-- KOLOM SLUG YANG BISA DIKLIK -->
                                     <td>
@@ -302,7 +309,7 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                                             <i class="bi bi-box-arrow-up-right" style="font-size: 10px;"></i>
                                         </a>
                                     </td>
-                                    <td><span class="badge bg-light bg-opacity-10 text-white"><?= htmlspecialchars($row['template']); ?></span></td>
+                                    <td><span class="badge bg-secondary bg-opacity-25 text-light"><?= htmlspecialchars($row['template']); ?></span></td>
                                     <td>
                                         <span class="badge <?= ($row['status'] == 'Aktif') ? 'bg-success' : 'bg-secondary'; ?>">
                                             <?= htmlspecialchars($row['status']); ?>
@@ -317,7 +324,7 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
                                     </td>
                                 </tr>
                                 <?php } } else { ?>
-                                <tr><td colspan="7" class="text-center py-4 text-muted">Belum ada data portofolio salon.</td></tr>
+                                <tr><td colspan="7" class="text-center py-4 text-secondary">Belum ada data portofolio salon.</td></tr>
                                 <?php } ?>
                             </tbody>
                         </table>
@@ -328,19 +335,19 @@ $query_logs = mysqli_query($koneksi, "SELECT * FROM activity_logs ORDER BY id_lo
             <!-- LOG AKTIVITAS -->
             <div class="col-lg-4">
                 <div class="card-custom">
-                    <h5 class="fw-bold text-white mb-3"><i class="bi bi-clock-history text-info me-2"></i>Log Aktivitas Sistem</h5>
+                    <h5 class="fw-bold text-white font-serif fs-4 mb-3"><i class="bi bi-clock-history me-2" style="color: #f3e5ab;"></i>Log Aktivitas Sistem</h5>
                     <div class="log-container d-flex flex-column gap-3">
-                        <?php if (mysqli_num_rows($query_logs) > 0) {
+                        <?php if ($query_logs && mysqli_num_rows($query_logs) > 0) {
                             while ($log = mysqli_fetch_assoc($query_logs)) { ?>
-                            <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(139,92,246,0.15);">
+                            <div class="p-3 rounded-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(212,175,55,0.15);">
                                 <div class="fw-semibold text-white mb-1" style="font-size: 12.5px;"><?= htmlspecialchars($log['keterangan']); ?></div>
                                 <div class="d-flex justify-content-between align-items-center" style="font-size: 11px;">
-                                    <span class="badge bg-primary bg-opacity-25 text-info"><?= htmlspecialchars($log['aksi'] ?? 'AKTIVITAS'); ?></span>
-                                    <span style="color: #cbd5e1;"><?= $log['waktu']; ?></span>
+                                    <span class="badge" style="background: rgba(212,175,55,0.15); color: #f3e5ab;"><?= htmlspecialchars($log['aksi'] ?? 'AKTIVITAS'); ?></span>
+                                    <span class="text-secondary"><?= $log['waktu']; ?></span>
                                 </div>
                             </div>
                         <?php } } else { ?>
-                            <p class="text-muted small text-center my-4">Belum ada aktivitas tercatat.</p>
+                            <p class="text-secondary small text-center my-4">Belum ada aktivitas tercatat.</p>
                         <?php } ?>
                     </div>
                 </div>

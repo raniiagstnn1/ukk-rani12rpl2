@@ -1,67 +1,75 @@
 <?php
 /**
  * =================================================================
- * TAMBAH PORTFOLIO ADMIN - BEAUTY DIGITAL HUB
+ * TAMBAH PORTFOLIO - LUXURY BLACK & GOLD EDITION
  * =================================================================
  */
 session_start();
-if (!isset($_SESSION['login'])) {
-    header("Location: login.php");
-    exit;
-}
 include 'koneksi.php';
 
-$error = '';
-$sukses = '';
-
-if (isset($_POST['simpan'])) {
-    $id_admin     = $_SESSION['id_admin'] ?? 1;
-    $nama_usaha   = mysqli_real_escape_string($koneksi, $_POST['nama_usaha']);
+// Proses simpan data saat form disubmit
+if (isset($_POST['submit'])) {
+    $id_admin       = 1; // Menggunakan ID admin pertama yang ada di tabel admins
+    $nama_usaha     = mysqli_real_escape_string($koneksi, $_POST['nama_usaha']);
+    $tagline        = mysqli_real_escape_string($koneksi, $_POST['tagline']);
+    $bio            = mysqli_real_escape_string($koneksi, $_POST['bio']);
+    $alamat         = mysqli_real_escape_string($koneksi, $_POST['alamat']);
+    $produk_unggulan= mysqli_real_escape_string($koneksi, $_POST['produk_unggulan']);
+    $no_wa          = mysqli_real_escape_string($koneksi, $_POST['no_wa']);
+    $template       = mysqli_real_escape_string($koneksi, $_POST['template']);
+    $status         = mysqli_real_escape_string($koneksi, $_POST['status']);
     
-    // PERBAIKAN: Ditambah angka acak agar slug tidak duplikat dan tidak error
-    $slug         = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $nama_usaha))) . '-' . rand(100, 999);
-    
-    $tagline      = mysqli_real_escape_string($koneksi, $_POST['tagline']);
-    $bio          = mysqli_real_escape_string($koneksi, $_POST['bio']);
-    $alamat       = mysqli_real_escape_string($koneksi, $_POST['alamat']);
-    $produk       = mysqli_real_escape_string($koneksi, $_POST['produk_unggulan']);
-    $no_wa        = mysqli_real_escape_string($koneksi, $_POST['no_wa']);
-    $template     = mysqli_real_escape_string($koneksi, $_POST['template']);
-    $status       = mysqli_real_escape_string($koneksi, $_POST['status']);
+    // Generate slug otomatis dari nama usaha
+    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $nama_usaha)));
 
-    // Upload Logo
+    // Upload Logo Usaha (Opsional)
     $logo = 'default.png';
     if (!empty($_FILES['logo']['name'])) {
         $nama_file_logo = $_FILES['logo']['name'];
-        $tmp_logo       = $_FILES['logo']['tmp_name'];
-        $ekstensi_logo  = pathinfo($nama_file_logo, PATHINFO_EXTENSION);
-        $logo           = 'logo_' . time() . '.' . $ekstensi_logo;
-        move_uploaded_file($tmp_logo, 'uploads/' . $logo);
+        $tmp_file_logo  = $_FILES['logo']['tmp_name'];
+        $ekstensi_logo  = strtolower(pathinfo($nama_file_logo, PATHINFO_EXTENSION));
+        $logo = 'logo_' . time() . '.' . $ekstensi_logo;
+        move_uploaded_file($tmp_file_logo, 'uploads/' . $logo);
     }
 
-    // Upload Foto Produk / Banner
+    // Upload Foto Produk Utama (Opsional)
     $foto_produk = '';
     if (!empty($_FILES['foto_produk']['name'])) {
-        $nama_file_foto = $_FILES['foto_produk']['name'];
-        $tmp_foto       = $_FILES['foto_produk']['tmp_name'];
-        $ekstensi_foto  = pathinfo($nama_file_foto, PATHINFO_EXTENSION);
-        $foto_produk    = 'produk_' . time() . '.' . $ekstensi_foto;
-        move_uploaded_file($tmp_foto, 'uploads/' . $foto_produk);
+        $nama_file_fp = $_FILES['foto_produk']['name'];
+        $tmp_file_fp  = $_FILES['foto_produk']['tmp_name'];
+        $ekstensi_fp  = strtolower(pathinfo($nama_file_fp, PATHINFO_EXTENSION));
+        $foto_produk = 'prod_' . time() . '.' . $ekstensi_fp;
+        move_uploaded_file($tmp_file_fp, 'uploads/' . $foto_produk);
     }
 
-    // Insert ke Database
-    $query = "INSERT INTO portfolios (id_admin, nama_usaha, slug, tagline, bio, alamat, produk_unggulan, no_wa, template, logo, foto_produk, status) 
-              VALUES ('$id_admin', '$nama_usaha', '$slug', '$tagline', '$bio', '$alamat', '$produk', '$no_wa', '$template', '$logo', '$foto_produk', '$status')";
+    // Query Insert (Tanpa jam operasional)
+    $query_insert = "INSERT INTO portfolios (id_admin, nama_usaha, slug, tagline, bio, alamat, produk_unggulan, no_wa, logo, foto_produk, template, status) 
+                     VALUES ('$id_admin', '$nama_usaha', '$slug', '$tagline', '$bio', '$alamat', '$produk_unggulan', '$no_wa', '$logo', '$foto_produk', '$template', '$status')";
     
-    if (mysqli_query($koneksi, $query)) {
-        // Catat ke Log Aktivitas
-        $ket_log = "Menambahkan portofolio salon baru: " . $nama_usaha;
-        mysqli_query($koneksi, "INSERT INTO activity_logs (aksi, keterangan) VALUES ('TAMBAH DATA', '$ket_log')");
-        
-        header("Location: dashboard.php");
-        exit;
+    if (mysqli_query($koneksi, $query_insert)) {
+        $id_portfolio_baru = mysqli_insert_id($koneksi);
+
+        // Handle upload Multi-Foto Galeri Tambahan
+        if (!empty($_FILES['galeri_multi']['name'][0])) {
+            foreach ($_FILES['galeri_multi']['tmp_name'] as $key => $tmp_name) {
+                if (!empty($_FILES['galeri_multi']['name'][$key])) {
+                    $nama_file_m = $_FILES['galeri_multi']['name'][$key];
+                    $ekstensi_m  = strtolower(pathinfo($nama_file_m, PATHINFO_EXTENSION));
+                    $nama_foto_m = 'galeri_' . time() . '_' . mt_rand(100, 999) . '.' . $ekstensi_m;
+                    
+                    if (move_uploaded_file($tmp_name, 'uploads/' . $nama_foto_m)) {
+                        mysqli_query($koneksi, "INSERT INTO portfolio_images (portfolio_id, foto) VALUES ('$id_portfolio_baru', '$nama_foto_m')");
+                    }
+                }
+            }
+        }
+
+        // Redirect langsung ke halaman web UMKM baru yang dibuat
+        $file_template_tujuan = !empty($template) ? $template . '.php' : 'template1.php';
+        echo "<script>alert('Portofolio UMKM berhasil ditambahkan!'); window.location='$file_template_tujuan?slug=$slug';</script>";
     } else {
-        $error = "Gagal menyimpan data: " . mysqli_error($koneksi);
+        $error_msg = mysqli_error($koneksi);
+        echo "<script>alert('Gagal menyimpan: $error_msg');</script>";
     }
 }
 ?>
@@ -70,167 +78,161 @@ if (isset($_POST['simpan'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah UMKM Baru - Beauty Digital Hub</title>
+    <title>Tambah UMKM Baru - Haute Couture Digital</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #07050f 0%, #120b22 50%, #1a1033 100%);
-            color: #ffffff;
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: radial-gradient(circle at top right, #12100e 0%, #060608 70%);
+            color: #f8fafc; 
             min-height: 100vh;
-            padding: 40px 0;
         }
-        .form-card {
-            background: #130f24;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            border-radius: 24px;
-            padding: 35px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            max-width: 750px;
-            margin: 0 auto;
+        .font-serif { 
+            font-family: 'Cormorant Garamond', serif; 
         }
-        .form-control, .form-select {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            color: #fff;
-            border-radius: 12px;
-            padding: 12px 16px;
-            font-size: 14px;
+        .navbar-custom { 
+            background: rgba(13, 13, 18, 0.95); 
+            backdrop-filter: blur(12px); 
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25); 
         }
-        .form-control:focus, .form-select:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: #a855f7;
-            color: #fff;
-            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
+        .form-card { 
+            background: #0d0d12; 
+            border: 1px solid rgba(212, 175, 55, 0.25); 
+            border-radius: 22px; 
+            padding: 40px; 
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7); 
         }
-        .form-control::placeholder {
-            color: #64748b;
+        .btn-gold { 
+            background: linear-gradient(135deg, #d4af37 0%, #aa771c 100%); 
+            color: #060608; 
+            font-weight: 700; 
+            border-radius: 50px; 
+            padding: 14px 30px; 
+            border: none; 
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3); 
+            transition: 0.3s; 
         }
-        .form-label {
-            font-weight: 600;
-            font-size: 13.5px;
-            color: #d8b4fe;
-            margin-bottom: 6px;
+        .btn-gold:hover { 
+            background: linear-gradient(135deg, #e5c158 0%, #c48b22 100%); 
+            color: #060608; 
+            transform: translateY(-2px); 
+            box-shadow: 0 14px 30px rgba(212, 175, 55, 0.45); 
         }
-        .btn-submit {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 30px;
-            font-weight: 700;
-            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
-            transition: 0.2s;
+        .text-gold-accent { 
+            color: #f3e5ab !important; 
         }
-        .btn-submit:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-            color: #fff;
+        .form-control, .form-select { 
+            background-color: #060608 !important; 
+            border: 1px solid rgba(212, 175, 55, 0.3) !important; 
+            color: #f8fafc !important; 
+            border-radius: 12px; 
+            padding: 12px 15px; 
         }
-        .btn-batal {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #cbd5e1;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-weight: 600;
-        }
-        .btn-batal:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
+        .form-control:focus, .form-select:focus { 
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25); 
+            border-color: #d4af37 !important; 
+            background-color: #0d0d12 !important; 
+            color: #fff !important;
         }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="dashboard.php" class="btn btn-outline-light btn-sm rounded-pill px-3 border-secondary text-light">
+                <i class="bi bi-arrow-left me-1"></i> Kembali ke Dashboard
+            </a>
+            <span class="navbar-brand fw-bold fs-5 text-gold-accent font-serif mb-0" style="letter-spacing: 0.5px;">
+                <i class="bi bi-stars me-1"></i> Tambah Salon / UMKM Baru
+            </span>
+        </div>
+    </nav>
 
-    <div class="container">
-        <div class="form-card">
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-light border-opacity-10">
-                <div>
-                    <h3 class="fw-bold mb-1 text-white"><i class="bi bi-shop text-purple me-2"></i>Tambah UMKM Baru</h3>
-                    <p class="text-secondary small mb-0">Isi formulir di bawah ini untuk menerbitkan website portofolio klien.</p>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <h3 class="fw-bold font-serif text-white mb-2 text-center" style="font-size: 32px;">Form Input Portofolio Salon VIP</h3>
+                    <p class="text-secondary small text-center mb-4">Tambahkan profil, layanan eksklusif, dan galeri salon klien.</p>
+                    
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Nama Usaha / Salon</label>
+                            <input type="text" name="nama_usaha" class="form-control" placeholder="Contoh: Lumière Haute Couture" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Tagline / Slogan</label>
+                            <input type="text" name="tagline" class="form-control" placeholder="Contoh: The Pinnacle of Elite Beauty" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Tentang Usaha / Bio Singkat</label>
+                            <textarea name="bio" class="form-control" rows="4" placeholder="Deskripsikan layanan atau keunggulan salon Anda..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Alamat Lengkap UMKM</label>
+                            <textarea name="alamat" class="form-control" rows="2" placeholder="Contoh: Boulevard St. Honoré, Elite District"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Layanan Unggulan</label>
+                            <input type="text" name="produk_unggulan" class="form-control" placeholder="Contoh: Royal Gold Facial, Diamond Hair Spa" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Nomor WhatsApp (Format: 628xxxxxxxxxx)</label>
+                            <input type="text" name="no_wa" class="form-control" placeholder="6281234567890" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-light fw-semibold small">Pilihan Template Web</label>
+                                <select name="template" class="form-select" required>
+                                    <option value="template1">Template 1 - Royal Emerald & Gold ($150)</option>
+                                    <option value="template2">Template 2 - Platinum Midnight ($290)</option>
+                                    <option value="template3">Template 3 - Obsidian Minimalist ($350)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-light fw-semibold small">Status Publikasi</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="Aktif">Aktif</option>
+                                    <option value="Draft">Draft</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Logo Usaha (Opsional)</label>
+                            <input type="file" name="logo" class="form-control">
+                            <small class="text-secondary">Format gambar: JPG, PNG, atau WEBP.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-light fw-semibold small">Foto Produk Utama / Banner (Opsional)</label>
+                            <input type="file" name="foto_produk" class="form-control">
+                            <small class="text-secondary">Format gambar: JPG, PNG, atau WEBP.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-light fw-semibold small">Galeri Foto Produk / Layanan Multi-File (Opsional)</label>
+                            <input type="file" name="galeri_multi[]" class="form-control" multiple>
+                            <small class="text-secondary">Bisa pilih banyak foto sekaligus untuk galeri katalog produk.</small>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" name="submit" class="btn btn-gold w-100 py-3 shadow">
+                                <i class="bi bi-check-circle-fill me-2"></i> Simpan & Kunjungi Web UMKM
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <a href="dashboard.php" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali
-                </a>
             </div>
-
-            <?php if (!empty($error)): ?>
-                <div class="alert alert-danger rounded-4 py-2 small"><?= $error; ?></div>
-            <?php endif; ?>
-
-            <form action="" method="POST" enctype="multipart/form-data">
-                <div class="mb-3">
-                    <label class="form-label">Nama Usaha / UMKM</label>
-                    <input type="text" name="nama_usaha" class="form-control" placeholder="Contoh: D'Queen Salon & Spa" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Tagline / Slogan Singkat</label>
-                    <input type="text" name="tagline" class="form-control" placeholder="Contoh: Cantik Alami dan Elegan Setiap Hari" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Tentang Usaha / Bio Singkat</label>
-                    <textarea name="bio" class="form-control" rows="3" placeholder="Deskripsikan layanan atau keunggulan salon Anda..." required></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Alamat Lengkap UMKM</label>
-                    <textarea name="alamat" class="form-control" rows="2" placeholder="Contoh: Jl. Ahmad Yani No. 12, Jatiwangi, Majalengka" required></textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Layanan Unggulan</label>
-                    <input type="text" name="produk_unggulan" class="form-control" placeholder="Contoh: Hair Spa, Eyelash, Smoothing, Facial" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Nomor WhatsApp (Format: 628xxxxxxxxxx)</label>
-                    <input type="text" name="no_wa" class="form-control" placeholder="6281234567890" required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Pilihan Template Web</label>
-                        <select name="template" class="form-select">
-                            <option value="template1">Template 1 - Luxury Maroon (Elegan)</option>
-                            <option value="template2">Template 2 - Soft Pink (Modern)</option>
-                            <option value="template3">Template 3 - Urban Grey (Minimalis)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Status Publikasi</label>
-                        <select name="status" class="form-select">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Draft">Draft</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Logo Usaha (Opsional)</label>
-                        <input type="file" name="logo" class="form-control">
-                    </div>
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label">Foto Produk / Banner (Opsional)</label>
-                        <input type="file" name="foto_produk" class="form-control">
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end gap-2 pt-3 border-top border-light border-opacity-10">
-                    <a href="dashboard.php" class="btn btn-batal">Batal</a>
-                    <button type="submit" name="simpan" class="btn btn-submit">
-                        <i class="bi bi-check-lg me-1"></i> Simpan & Terbitkan
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
