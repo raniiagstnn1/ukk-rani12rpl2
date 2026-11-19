@@ -1,10 +1,5 @@
 <?php
-/**
-- =================================================================
-- HALAMAN LOGIN ADMIN - LUXURY BLACK & GOLD EDITION
-- Layout Split-Screen (Form Kiri, Animasi Gradasi Kanan)
-- =================================================================
- */
+
 session_start();
 include 'koneksi.php';
 
@@ -165,7 +160,7 @@ if (isset($_POST['login'])) {
             color: #060608;
         }
 
-        /* Bagian Kanan (Animasi Gelombang & Cahaya Emas) */
+       
         .visual-side {
             flex: 1.25;
             background: #08080c;

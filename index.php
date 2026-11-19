@@ -382,11 +382,11 @@ $query_portfolios = mysqli_query($koneksi, "SELECT * FROM portfolios WHERE statu
                 <div class="card-portfolio">
                     <div class="template-preview-banner" style="background: linear-gradient(135deg, #1c150b, #0d0d12);">
                         <i class="bi bi-gem fs-1 mb-2" style="color: #d4af37;"></i>
-                        <span class="badge rounded-pill px-3" style="background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3);">Template 1 (Emerald Gold)</span>
+                        <span class="badge rounded-pill px-3" style="background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3);">Template 1 (Royal Plum & Silver)</span>
                     </div>
                     <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="fw-bold text-white font-serif fs-3 mb-1">Royal Emerald & Gold</h5>
-                        <p class="small mb-3 text-secondary">Kesan sangat mewah dengan nuansa zamrud dan emas berkelas tinggi.</p>
+                        <h5 class="fw-bold text-white font-serif fs-3 mb-1">Royal Plum & Silver</h5>
+                        <p class="small mb-3 text-secondary">Desain elegan dengan perpaduan warna plum dan silver yang memberikan kesan mewah, anggun, dan berkelas.</p>
                         <div class="mb-3 p-3 rounded-3" style="background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.2);">
                             <span class="text-secondary small d-block">Investment Package:</span>
                             <h3 class="fw-bold font-serif mb-0" style="color:#f3e5ab !important; font-size: 28px;">$150 <span class="fs-6 text-secondary fw-normal">/ project</span></h3>
@@ -428,11 +428,11 @@ $query_portfolios = mysqli_query($koneksi, "SELECT * FROM portfolios WHERE statu
                 <div class="card-portfolio">
                     <div class="template-preview-banner" style="background: linear-gradient(135deg, #14141a, #0d0d12);">
                         <i class="bi bi-flower1 fs-1 mb-2" style="color: #d4af37;"></i>
-                        <span class="badge rounded-pill px-3" style="background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3);">Template 3 (Obsidian Minimalist)</span>
+                        <span class="badge rounded-pill px-3" style="background: rgba(212,175,55,0.15); color: #f3e5ab; border: 1px solid rgba(212,175,55,0.3);">Template 3 (Midnight Sapphire)</span>
                     </div>
                     <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="fw-bold text-white font-serif fs-3 mb-1">Obsidian Minimalist</h5>
-                        <p class="small mb-3 text-secondary">Gaya minimalis bersih ala majalah mode dunia, fokus pada visual karya.</p>
+                        <h5 class="fw-bold text-white font-serif fs-3 mb-1">Midnight Sapphire</h5>
+                        <p class="small mb-3 text-secondary">Tampilan modern dengan nuansa midnight blue dan sentuhan silver yang menciptakan kesan eksklusif dan futuristik.</p>
                         <div class="mb-3 p-3 rounded-3" style="background: rgba(212,175,55,0.05); border: 1px solid rgba(212,175,55,0.2);">
                             <span class="text-secondary small d-block">Investment Package:</span>
                             <h3 class="fw-bold font-serif mb-0" style="color:#f3e5ab !important; font-size: 28px;">$350 <span class="fs-6 text-secondary fw-normal">/ project</span></h3>
